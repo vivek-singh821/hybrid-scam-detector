@@ -62,17 +62,17 @@ st.divider()
 
 # Input
 user_input = st.text_area("Enter your message:", height=150)
-st.caption("💡 Press Ctrl + Enter to analyze the message.")
 
-if user_input.strip() != "":
+if st.button("Analyze Message"):
+    if user_input.strip() == "":
+        st.warning("⚠ Please enter a message.")
+    else:
+        transformed = vectorizer.transform([user_input])
+        prediction = model.predict(transformed)[0]
+        probabilities = model.predict_proba(transformed)[0]
 
-    # 1️⃣ ML Prediction
-    transformed = vectorizer.transform([user_input])
-    prediction = model.predict(transformed)[0]
-    probabilities = model.predict_proba(transformed)[0]
-
-    spam_prob = probabilities[1] * 100
-    ham_prob = probabilities[0] * 100
+        spam_prob = probabilities[1] * 100
+        ham_prob = probabilities[0] * 100
 
     # 2️⃣ URL Detection
     urls = detect_urls(user_input)
